@@ -145,6 +145,10 @@ return [
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
 
+		/*
+		 * Debugger
+		 */
+//		'Anbu\ProfilerServiceProvider',
 	],
 
 	/*

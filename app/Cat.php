@@ -1,7 +1,10 @@
+<?php namespace App;
 
-class Cat extends Eloquent{
+use Illuminate\Database\Eloquent\Model;
+
+class Cat extends Model{
  protected $fillable=array('name','date_of_birth','breed_id');
  public function breed(){
-  return $this->belongTo('Breed');
+  return $this->belongsTo('Breed');
  }
 }

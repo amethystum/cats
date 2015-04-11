@@ -1,5 +1,7 @@
 <?php
 
+use App\Cat;
+use App\Breed;
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -24,7 +26,8 @@ Route::get('/', function(){
 });
 
 Route::get('cats', function(){
-	return "All cats";
+  $cats = Cat::all();
+	return view('cats.index')->with('cats', $cats);
 });
 
 Route::get('cats/{id}', function($id){
@@ -33,4 +36,11 @@ Route::get('cats/{id}', function($id){
 
 Route::get('about', function(){
 	return view('about')->with('number_of_cats', 9000);
+});
+
+Route::get('cats/breeds/{name}', function($name){
+  $breed = Breed::whereName($name)->with('cats')->first();
+  return view('cats.index')
+    ->with('breed', $breed)
+    ->with('cats', $breed->cats);
 });
