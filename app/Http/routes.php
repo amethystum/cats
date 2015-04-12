@@ -1,5 +1,4 @@
 <?php
-
 use App\Cat;
 use App\Breed;
 /*
@@ -28,6 +27,11 @@ Route::get('/', function(){
 Route::get('cats', function(){
   $cats = Cat::all();
 	return view('cats.index')->with('cats', $cats);
+});
+
+Route::get('test', function(){
+	$cat = Cat::first();
+  return view('test.index')->with('teststr', $cat->breed->name);
 });
 
 Route::get('cats/{id}', function($id){

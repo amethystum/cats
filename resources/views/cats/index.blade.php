@@ -14,6 +14,7 @@
 @section('content')
 	<div>a lot of cats</div>
     @foreach($cats as $cat)
+				{!! var_dump($cat->created_at) !!}
     <div class="cat">
       <a href="{!! url('cats/'.$cat->id) !!}">
         <strong>{!! $cat->name !!}</strong> - {!! $cat->breed->name !!}
