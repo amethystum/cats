@@ -2,7 +2,7 @@
 
 @section('header')
 @if(isset($breed))
-    {!! link_to('/', 'Back to the overview') !!}
+    {!! url('/', 'Back to the overview') !!}
 @endif
   <h2>
   	My Cats!
