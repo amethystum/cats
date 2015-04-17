@@ -16,7 +16,7 @@
 @section('content')
   {!! Form::model($cat, array('method'=>$method,'url'=>'cats/'.$cat->id)) !!}
 
-@unless($method=='delete')
+@if($method!='delete')
   <div class="form-group">
     {!! Form::label('Name') !!}
     {!! Form::text('name') !!}
