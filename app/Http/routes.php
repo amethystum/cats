@@ -35,17 +35,15 @@ Route::get('test', function(){
 });
 
 Route::model('cat', 'App\Cat');
-Route::get('cats/{cat}', function(Cat $cat){
-	return view('cats.single')->with('cat',$cat);
-});
-
 Route::get('cats/create',function(){
 	$cat=new Cat;
 	return view('cats.edit')
 	  ->with('cat',$cat)
 	  ->with('method','post');
 });
-
+Route::get('cats/{cat}', function(Cat $cat){
+	return view('cats.single')->with('cat',$cat);
+});
 Route::get('cats/{cat}/edit',function(Cat $cat){
 	return view('cats.edit')
 	  ->with('cat',$cat)

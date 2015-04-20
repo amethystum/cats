@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('header')
-  <a href="{!! ('cats/'.$cat->id.'') !!}">&larr; Cancel </a>
+  <a href="{!! url('cats/'.$cat->id.'') !!}">&larr; Cancel </a>
   <h2>
     @if($method=='post')
       Add a new cat
