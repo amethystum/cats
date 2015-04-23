@@ -35,12 +35,24 @@ Route::get('test', function(){
 });
 
 Route::model('cat', 'App\Cat');
+//Route::group(array('before'=>'auth'), function(){
 Route::get('cats/create',function(){
 	$cat=new Cat;
 	return view('cats.edit')
 	  ->with('cat',$cat)
 	  ->with('method','post');
 });
+Route::post('cats',function(){
+  $cat=Cat::create(Input::all());
+	$cat->user_id = Auth::user()->id;
+	if($cat->save()){
+  	return Redirect::to('cats/'.$cat->id)->with('message','Successfully created page!');
+	}else{
+		return Redirect::back()->with('error', 'Could not create profile');
+	}
+});
+//});
+
 Route::get('cats/{cat}', function(Cat $cat){
 	return view('cats.single')->with('cat',$cat);
 });
@@ -67,14 +79,13 @@ Route::get('cats/breeds/{name}', function($name){
     ->with('cats', $breed->cats);
 });
 
-Route::post('cats',function(){
-  $cat=Cat::create(Input::all());
-  return Redirect::to('cats/'.$cat->id)->with('message','Successfully created page!');
-});
-
 Route::put('cats/{cat}',function(Cat $cat){
-  $cat->update(Input::all());
-  return Redirect::to('cats/'.$cat->id)->with('message','Successfully updated page!');
+  if(Auth::user()->canEdit($cat)){
+		$cat->update(Input::all());
+  	return Redirect::to('cats/'.$cat->id)->with('message','Successfully updated page!');
+	}else{
+		return Redirect::to('cats/'.$cat->id)->with('error',"Unauthorized operation");
+	}
 });
 
 Route::delete('cats/{cat}',function(Cat $cat){
@@ -92,3 +103,24 @@ View::composer('cats.edit',function($view){
   }
   $view->with('breed_options',$breed_options);
 });
+
+Route::get('login', function(){
+	return view('login');
+});
+
+Route::post('login', function(){
+if(Auth::attempt(Input::only('username', 'password'))) {
+return Redirect::intended('/');
+} else {
+return Redirect::back()
+->withInput()
+->with('error', "Invalid credentials");
+}
+});
+
+Route::get('logout', function(){
+Auth::logout();
+return Redirect::to('/')
+->with('message', 'You are now logged out');
+});
+
