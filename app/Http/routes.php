@@ -35,7 +35,7 @@ Route::get('test', function(){
 });
 
 Route::model('cat', 'App\Cat');
-//Route::group(array('before'=>'auth'), function(){
+Route::group(array('middleware'=>'auth'), function(){
 Route::get('cats/create',function(){
 	$cat=new Cat;
 	return view('cats.edit')
@@ -43,16 +43,26 @@ Route::get('cats/create',function(){
 	  ->with('method','post');
 });
 Route::post('cats',function(){
-  $cat=Cat::create(Input::all());
-	$cat->user_id = Auth::user()->id;
-	if($cat->save()){
-  	return Redirect::to('cats/'.$cat->id)->with('message','Successfully created page!');
-	}else{
-		return Redirect::back()->with('error', 'Could not create profile');
+	$rules = array('name' => 'required|min:3', 'date_of_birth' => array('required', 'date'));
+	$validation_result = Validator::make(Input::all(), $rules);
+	if($validation_result->fails()){
+		return Redirect::back()->with('message', $validation_result->messages());
+}
+else{
+	  $cat=Cat::create(Input::all());
+		$cat->user_id = Auth::user()->id;
+		dd("success");
+		if($cat->save()){
+  		return Redirect::to('cats/'.$cat->id)->with('message','Successfully created page!');
+		}else{
+			return Redirect::back()->with('error', 'Could not create profile');
+		}
 	}
 });
-//});
-
+});
+Route::get('auth/login', function(){
+	return Redirect::to('login');
+});
 Route::get('cats/{cat}', function(Cat $cat){
 	return view('cats.single')->with('cat',$cat);
 });
