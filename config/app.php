@@ -147,6 +147,9 @@ return [
 
 		/* Form Html for laravel 5 */
 		'Collective\Html\HtmlServiceProvider',
+
+		/* IDE Helper */
+		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
 		/*
 		 * Debugger
 		 */

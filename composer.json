@@ -6,7 +6,9 @@
 	"type": "project",
 	"require": {
 		"laravel/framework": "5.0.*",
-		"laravelcollective/html": "~5.0"
+		"laravelcollective/html": "~5.0",
+		"doctrine/dbal": "~2.3",
+        "barryvdh/laravel-ide-helper": "2.0.*@dev"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",
@@ -37,7 +39,12 @@
 		"post-create-project-cmd": [
 			"php -r \"copy('.env.example', '.env');\"",
 			"php artisan key:generate"
-		]
+		],
+		"post-update-cmd":[  
+        "php artisan clear-compiled",  
+        "php artisan ide-helper:generate",  
+        "php artisan optimize"  
+    ]
 	},
 	"config": {
 		"preferred-install": "dist"

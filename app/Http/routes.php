@@ -35,14 +35,14 @@ Route::get('test', function(){
 });
 
 Route::model('cat', 'App\Cat');
-Route::group(array('middleware'=>'auth'), function(){
-Route::get('cats/create',function(){
+//Route::group(array('middleware'=>'auth'), function(){
+Route::get('cats/create',array('middleware'=>'auth', function(){
 	$cat=new Cat;
 	return view('cats.edit')
 	  ->with('cat',$cat)
 	  ->with('method','post');
-});
-Route::post('cats',function(){
+}));
+Route::post('cats',array('middleware'=>'auth|csrf', function(){
 	$rules = array('name' => 'required|min:3', 'date_of_birth' => array('required', 'date'));
 	$validation_result = Validator::make(Input::all(), $rules);
 	if($validation_result->fails()){
@@ -58,8 +58,8 @@ else{
 			return Redirect::back()->with('error', 'Could not create profile');
 		}
 	}
-});
-});
+}));
+//});
 Route::get('auth/login', function(){
 	return Redirect::to('login');
 });
@@ -89,20 +89,20 @@ Route::get('cats/breeds/{name}', function($name){
     ->with('cats', $breed->cats);
 });
 
-Route::put('cats/{cat}',function(Cat $cat){
+Route::put('cats/{cat}',array('middleware'=>'csrf', function(Cat $cat){
   if(Auth::user()->canEdit($cat)){
 		$cat->update(Input::all());
   	return Redirect::to('cats/'.$cat->id)->with('message','Successfully updated page!');
 	}else{
 		return Redirect::to('cats/'.$cat->id)->with('error',"Unauthorized operation");
 	}
-});
+}));
 
-Route::delete('cats/{cat}',function(Cat $cat){
+Route::delete('cats/{cat}',array('middleware'=>'csrf', function(Cat $cat){
   $cat->delete();
   return Redirect::to('cats')
     ->with('message','Successfully deleted page!');
-});
+}));
 
 View::composer('cats.edit',function($view){
   $breeds=Breed::all();
@@ -118,8 +118,10 @@ Route::get('login', function(){
 	return view('login');
 });
 
-Route::post('login', function(){
+Route::post('login',  function(){
 if(Auth::attempt(Input::only('username', 'password'))) {
+//$path=$this->session->pull('url.intended','/');
+//var_dump($this->session);
 return Redirect::intended('/');
 } else {
 return Redirect::back()
