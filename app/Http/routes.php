@@ -120,9 +120,11 @@ Route::get('login', function(){
 
 Route::post('login',  function(){
 if(Auth::attempt(Input::only('username', 'password'))) {
+//dd($this->session);
 //$path=$this->session->pull('url.intended','/');
 //var_dump($this->session);
-return Redirect::intended('/');
+//return Redirect::intended('/');
+return Redirect::to('/');
 } else {
 return Redirect::back()
 ->withInput()
